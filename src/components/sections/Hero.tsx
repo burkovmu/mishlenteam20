@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -22,8 +23,13 @@ const Hero = () => {
           ease: 'power3.out',
         });
         
-        const handleMouseMove = () => {
-          // Обработчик движения мыши
+        const handleMouseMove = (e: MouseEvent) => {
+          // Обновляем позицию мыши для интерактивного фона
+          const { clientX, clientY } = e;
+          setMousePosition({
+            x: clientX / window.innerWidth,
+            y: clientY / window.innerHeight
+          });
         };
 
         window.addEventListener('mousemove', handleMouseMove);
@@ -51,6 +57,22 @@ const Hero = () => {
       ref={containerRef}
       className="relative min-h-screen w-full overflow-hidden bg-background"
     >
+      {/* Интерактивный цветной фон с градиентными пятнами */}
+      <div 
+        className="absolute inset-0 z-0 opacity-40 pointer-events-none"
+        style={{
+          background: `radial-gradient(circle at ${mousePosition.x * 100}% ${mousePosition.y * 100}%, rgba(100, 70, 255, 0.3), transparent 30%), 
+                      radial-gradient(circle at ${100 - mousePosition.x * 100}% ${mousePosition.y * 80}%, rgba(255, 70, 120, 0.3), transparent 40%), 
+                      radial-gradient(circle at ${mousePosition.x * 80}% ${100 - mousePosition.y * 100}%, rgba(70, 200, 255, 0.3), transparent 35%), 
+                      radial-gradient(circle at ${mousePosition.x * 50 + 50}% ${mousePosition.y * 50 + 25}%, rgba(255, 180, 70, 0.2), transparent 45%)`,
+          filter: 'blur(60px)',
+          transition: 'background 0.3s ease-out'
+        }}
+      />
+      
+      {/* Полупрозрачная текстура шума для эффекта затемнения */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-br from-black/30 to-black/10 opacity-40 mix-blend-multiply pointer-events-none" />
+
       {/* Фоновые элементы */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-0 left-0 w-2/3 h-screen bg-accent/5 -skew-x-12 transform origin-top-left" />
