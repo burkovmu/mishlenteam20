@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import MenuButton from '../ui/MenuButton';
-import MobileMenu from '../ui/MobileMenu';
+import MenuButton from '../../components/ui/MenuButton';
+import MobileMenu from '../../components/ui/MobileMenu';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);

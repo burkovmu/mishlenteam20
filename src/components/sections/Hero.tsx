@@ -4,8 +4,6 @@ import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import MagneticButton from '@/components/ui/MagneticButton';
-import Link from 'next/link';
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
