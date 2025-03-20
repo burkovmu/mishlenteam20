@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -8,46 +8,40 @@ import MagneticButton from '@/components/ui/MagneticButton';
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
-
+  
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      gsap.registerPlugin(ScrollTrigger);
-      
-      const handleMouseMove = (e: MouseEvent) => {
-        setMousePosition({ x: e.clientX, y: e.clientY });
-      };
+    gsap.registerPlugin(ScrollTrigger);
+    
+    const initAnimation = () => {
+      if (containerRef.current) {
+        // Анимация для заголовка
+        gsap.from('.hero-title span', {
+          y: 100,
+          opacity: 0,
+          duration: 1,
+          stagger: 0.2,
+          ease: 'power3.out',
+        });
+        
+        const handleMouseMove = () => {
+          // Обработчик движения мыши
+        };
 
-      window.addEventListener('mousemove', handleMouseMove);
-
-      return () => window.removeEventListener('mousemove', handleMouseMove);
-    }
+        window.addEventListener('mousemove', handleMouseMove);
+        
+        return () => {
+          window.removeEventListener('mousemove', handleMouseMove);
+        };
+      }
+    };
+    
+    initAnimation();
   }, []);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.3 },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 50, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
-    },
-  };
-
+  
   return (
     <section
       ref={containerRef}
       className="relative min-h-screen w-full overflow-hidden bg-background"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
       {/* Фоновые элементы */}
       <div className="absolute inset-0 overflow-hidden">
@@ -83,28 +77,26 @@ const Hero = () => {
       </div>
 
       {/* Сетка точек */}
-      <div className="absolute inset-0 grid grid-cols-[repeat(30,1fr)] grid-rows-[repeat(30,1fr)] opacity-20">
-        {[...Array(900)].map((_, i) => {
-          const row = Math.floor(i / 30);
-          const col = i % 30;
-          const delay = (row + col) * 0.03;
-          
-          return (
+      <div className="absolute inset-0 grid grid-cols-3 grid-rows-3 opacity-30">
+        {Array.from({ length: 9 }).map((_, index) => (
+          <motion.div
+            key={index}
+            className="flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: index * 0.1, duration: 0.5 }}
+          >
             <motion.div
-              key={i}
-              className="w-[1px] h-[1px] bg-accent rounded-full"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.3 }}
+              className="w-1 h-1 bg-accent/80 rounded-full"
+              animate={{ scale: [1, 1.5, 1] }}
               transition={{
-                duration: 2,
-                delay,
+                duration: 2 + Math.random() * 2,
                 repeat: Infinity,
-                repeatType: 'reverse',
-                ease: [0.16, 1, 0.3, 1],
+                repeatType: "reverse"
               }}
             />
-          );
-        })}
+          </motion.div>
+        ))}
       </div>
 
       {/* Плавающие геометрические фигуры */}
@@ -151,9 +143,6 @@ const Hero = () => {
         {/* Левая колонка */}
         <motion.div 
           className="w-full md:w-1/2 h-full px-6 md:pl-24 flex flex-col justify-center py-24 md:py-0"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
         >
           {/* Декоративная линия с точками - скрываем на мобильных */}
           <motion.div
@@ -182,7 +171,6 @@ const Hero = () => {
           </motion.div>
 
           <motion.div 
-            variants={itemVariants}
             className="mb-6 md:mb-10 flex items-center gap-4"
           >
             <div className="w-8 md:w-12 h-[2px] bg-accent/50" />
@@ -191,7 +179,6 @@ const Hero = () => {
 
           <motion.h1 
             className="text-4xl md:text-7xl font-bold font-display leading-[0.95] mb-6 md:mb-10"
-            variants={itemVariants}
           >
             <span className="block">Добавим</span>
             <span className="block text-gradient ml-4 md:ml-16 my-2 md:my-3">звезд</span>
@@ -199,7 +186,6 @@ const Hero = () => {
           </motion.h1>
 
           <motion.p
-            variants={itemVariants}
             className="text-lg md:text-xl text-foreground/70 max-w-md ml-0 md:ml-16 mb-8 md:mb-12 leading-relaxed"
           >
             Мы создаем <span className="text-accent font-medium">инновационные</span> цифровые решения, 
@@ -207,7 +193,6 @@ const Hero = () => {
           </motion.p>
 
           <motion.div
-            variants={itemVariants}
             className="flex items-center gap-6 ml-4 md:ml-32"
           >
             <MagneticButton 
@@ -240,7 +225,6 @@ const Hero = () => {
 
           {/* Статистика */}
           <motion.div
-            variants={itemVariants}
             className="flex flex-wrap gap-8 md:gap-16 mt-12 md:mt-20 ml-0 md:ml-16"
           >
             {[
@@ -388,7 +372,7 @@ const Hero = () => {
         <div className="flex flex-col md:flex-row items-center gap-4 md:gap-12 mb-4 md:mb-0">
           <span className="text-xs md:text-sm text-foreground/60 font-medium">Следите за нами</span>
           <div className="flex items-center gap-4 md:gap-6">
-            {['Telegram', 'Instagram', 'Behance'].map((social, i) => (
+            {['Telegram', 'Instagram', 'Behance'].map((social) => (
               <motion.a
                 key={social}
                 href="#"

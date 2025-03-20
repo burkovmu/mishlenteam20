@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
-import { motion, useAnimation, AnimatePresence } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -271,7 +271,7 @@ const Articles = () => {
                   className="flex flex-wrap gap-4"
                   variants={containerVariants}
                 >
-                  {['Web-разработка', 'UX/UI Дизайн', 'Оптимизация', 'SEO', 'Тренды', 'Инструменты'].map((tag, index) => (
+                  {['Web-разработка', 'UX/UI Дизайн', 'Оптимизация', 'SEO', 'Тренды', 'Инструменты'].map((tag) => (
                     <motion.div
                       key={tag}
                       variants={itemVariants}
