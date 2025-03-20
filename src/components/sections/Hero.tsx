@@ -193,9 +193,9 @@ const Hero = () => {
             className="text-7xl font-bold font-display leading-[0.9] mb-10"
             variants={itemVariants}
           >
-            <span className="block">Создаем</span>
-            <span className="block text-gradient ml-16 my-3">цифровое</span>
-            <span className="block ml-32">будущее</span>
+            <span className="block">Добавим</span>
+            <span className="block text-gradient ml-16 my-3">звезд</span>
+            <span className="block ml-32">вашему бизнесу</span>
           </motion.h1>
 
           <motion.p
