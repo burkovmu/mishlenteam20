@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Manrope, Space_Grotesk, Montserrat } from "next/font/google";
 import "./globals.css";
-import SmoothScroll from "@/components/ui/SmoothScroll";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/ui/Footer";
+import SmoothScroll from "../components/ui/SmoothScroll";
+import Header from "../components/layout/Header";
+import Footer from "../components/ui/Footer";
 
 // Основной текст: Manrope - современный, четкий и хорошо читаемый шрифт
 const manrope = Manrope({

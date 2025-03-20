@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import MagneticButton from '@/components/ui/MagneticButton';
+import Link from 'next/link';
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -37,6 +38,15 @@ const Hero = () => {
     
     initAnimation();
   }, []);
+  
+  // Функция для плавной прокрутки к секции работ
+  const scrollToPortfolio = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const portfolioSection = document.getElementById('portfolio');
+    if (portfolioSection) {
+      portfolioSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   
   return (
     <section
@@ -182,7 +192,7 @@ const Hero = () => {
           >
             <span className="block">Добавим</span>
             <span className="block text-gradient ml-4 md:ml-16 my-2 md:my-3">звезд</span>
-            <span className="block ml-8 md:ml-32">вашему бизнесу</span>
+            <span className="inline-block whitespace-nowrap ml-8 md:ml-32">вашему бизнесу</span>
           </motion.h1>
 
           <motion.p
@@ -195,21 +205,21 @@ const Hero = () => {
           <motion.div
             className="flex items-center gap-6 ml-4 md:ml-32"
           >
-            <MagneticButton 
-              strength={50}
-              className="group relative overflow-hidden rounded-full bg-accent text-background hover:bg-accent/90 transition-all duration-300 py-3 md:py-4 px-6 md:px-8 font-sans tracking-wide text-base md:text-lg shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30"
+            <motion.button
+              onClick={scrollToPortfolio}
+              className="group relative overflow-hidden rounded-md border border-accent/30 bg-background/30 backdrop-blur-sm hover:border-accent/60 transition-all duration-300 py-3 md:py-3.5 px-6 md:px-8"
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.98 }}
             >
-              <motion.span
-                className="relative z-10 flex items-center gap-2"
-                whileHover={{ x: 5 }}
-              >
-                Начать проект
+              <span className="relative z-10 flex items-center gap-2 text-sm md:text-base font-medium tracking-wide text-foreground/90">
+                Смотреть кейсы
                 <svg 
-                  width="24" height="24" 
+                  width="18" 
+                  height="18" 
                   viewBox="0 0 24 24" 
                   fill="none" 
                   xmlns="http://www.w3.org/2000/svg"
-                  className="transition-transform duration-300 group-hover:translate-x-1"
+                  className="text-accent transition-transform duration-300 group-hover:translate-x-1"
                 >
                   <path 
                     d="M5 12H19M19 12L12 5M19 12L12 19" 
@@ -219,8 +229,16 @@ const Hero = () => {
                     strokeLinejoin="round"
                   />
                 </svg>
-              </motion.span>
-            </MagneticButton>
+              </span>
+              
+              {/* Едва заметный эффект при наведении */}
+              <motion.div 
+                className="absolute inset-0 bg-accent/5 z-0"
+                initial={{ opacity: 0 }}
+                whileHover={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              />
+            </motion.button>
           </motion.div>
 
           {/* Статистика */}

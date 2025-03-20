@@ -14,6 +14,10 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   poweredByHeader: false,
+  webpack: (config) => {
+    config.resolve.fallback = { fs: false };
+    return config;
+  },
 }
 
 module.exports = nextConfig 

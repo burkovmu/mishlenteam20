@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, memo, useEffect } from 'react';
+import React, { useState, memo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import ContactModal from './ContactModal';
@@ -513,6 +513,7 @@ const Portfolio = () => {
   const [hoveredProjectId, setHoveredProjectId] = useState<number | null>(null);
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -533,7 +534,11 @@ const Portfolio = () => {
   };
 
   return (
-    <section id="portfolio" className="relative py-20 md:py-32 bg-background overflow-hidden">
+    <section 
+      ref={sectionRef}
+      className="py-16 md:py-24 bg-background overflow-hidden relative"
+      id="portfolio"
+    >
       {/* Фоновые элементы */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-0 right-0 w-2/3 h-screen bg-accent/5 skew-x-12 transform origin-top-right" />
