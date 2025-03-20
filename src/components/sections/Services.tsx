@@ -25,8 +25,8 @@ const Services = () => {
           viewBox="0 0 24 24" 
           fill="none" 
           xmlns="http://www.w3.org/2000/svg"
-          animate={{ rotate: [0, 360] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          whileHover={{ scale: 1.2 }}
+          transition={{ type: "spring", stiffness: 400, damping: 10 }}
         >
           <path d="M12 16.5V21.5M18 21.5H6M5 3.5H19C20.1046 3.5 21 4.39543 21 5.5V15.5C21 16.6046 20.1046 17.5 19 17.5H5C3.89543 17.5 3 16.6046 3 15.5V5.5C3 4.39543 3.89543 3.5 5 3.5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </motion.svg>
@@ -99,7 +99,7 @@ const Services = () => {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.6,
+        duration: 0.5,
         ease: [0.16, 1, 0.3, 1],
       },
     },
@@ -211,16 +211,16 @@ const Services = () => {
           <div className="col-span-12 md:col-span-4 relative mb-8 md:mb-0">
             <motion.div 
               className="md:sticky md:top-32 flex flex-col items-start px-4 md:px-0"
-              initial={{ opacity: 0, x: -50 }}
+              initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.6 }}
             >
               <motion.span
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.4 }}
                 className="text-accent font-medium tracking-wider uppercase text-sm mb-6 md:mb-8"
               >
                 Наши услуги
@@ -253,10 +253,10 @@ const Services = () => {
 
           <motion.div 
             className="col-span-12 md:col-span-8 grid grid-cols-12 gap-4 md:gap-8"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6 }}
           >
             {services.map((service, index) => (
               <motion.div
@@ -271,16 +271,49 @@ const Services = () => {
                   'md:col-span-6'
                 } mb-4 md:mb-0`}
               >
-                <Card3D 
-                  className="bg-card/80 backdrop-blur-sm p-6 md:p-8 h-full rounded-xl border border-border hover:border-accent/50 transition-all duration-500"
-                  glareColor={index % 2 === 0 ? 'rgba(255, 62, 0, 0.1)' : 'rgba(37, 99, 235, 0.1)'}
+                <motion.div 
+                  className="bg-card/80 backdrop-blur-sm p-6 md:p-8 h-full rounded-xl border border-border relative overflow-hidden group"
+                  whileHover={{ 
+                    scale: 1.02,
+                    transition: { duration: 0.3 }
+                  }}
                 >
+                  {/* Фоновый градиент */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    initial={false}
+                    animate={{ 
+                      background: index % 2 === 0 
+                        ? ['linear-gradient(135deg, rgba(255,62,0,0.05) 0%, transparent 50%, rgba(37,99,235,0.05) 100%)'] 
+                        : ['linear-gradient(135deg, rgba(37,99,235,0.05) 0%, transparent 50%, rgba(255,62,0,0.05) 100%)']
+                    }}
+                  />
+
+                  {/* Контент */}
                   <div className="relative z-10">
-                    <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl bg-accent/10 flex items-center justify-center text-accent mb-6 md:mb-8 transition-all duration-300 hover:scale-110">
+                    <motion.div 
+                      className="w-12 h-12 md:w-16 md:h-16 rounded-xl bg-accent/10 flex items-center justify-center text-accent mb-6 md:mb-8"
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                    >
                       {service.icon}
-                    </div>
-                    <h3 className="text-2xl md:text-3xl font-bold font-display mb-3 md:mb-4">{service.title}</h3>
-                    <p className="text-foreground/80 mb-6 md:mb-8 leading-relaxed text-base md:text-lg">{service.description}</p>
+                    </motion.div>
+
+                    <motion.h3 
+                      className="text-2xl md:text-3xl font-bold font-display mb-3 md:mb-4"
+                      initial={{ opacity: 0.8 }}
+                      whileHover={{ opacity: 1 }}
+                    >
+                      {service.title}
+                    </motion.h3>
+
+                    <motion.p 
+                      className="text-foreground/80 mb-6 md:mb-8 leading-relaxed text-base md:text-lg"
+                      initial={{ opacity: 0.7 }}
+                      whileHover={{ opacity: 1 }}
+                    >
+                      {service.description}
+                    </motion.p>
                     
                     <ul className="space-y-3 md:space-y-4">
                       {service.features.map((feature, featureIndex) => (
@@ -289,13 +322,22 @@ const Services = () => {
                           className="flex items-center text-sm md:text-base text-foreground/70"
                           initial={{ opacity: 0, x: -10 }}
                           whileInView={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.2 + featureIndex * 0.1 }}
+                          whileHover={{ x: 5, color: 'rgb(255, 62, 0)' }}
+                          transition={{ 
+                            delay: 0.2 + featureIndex * 0.1,
+                            type: "spring",
+                            stiffness: 400,
+                            damping: 17
+                          }}
                         >
-                          <svg 
+                          <motion.svg 
                             className="w-5 h-5 md:w-6 md:h-6 mr-2 md:mr-3 text-accent" 
                             viewBox="0 0 24 24" 
                             fill="none" 
                             xmlns="http://www.w3.org/2000/svg"
+                            initial={{ scale: 1 }}
+                            whileHover={{ scale: 1.2, rotate: 360 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 10 }}
                           >
                             <path 
                               d="M20 6L9 17L4 12" 
@@ -304,16 +346,13 @@ const Services = () => {
                               strokeLinecap="round" 
                               strokeLinejoin="round"
                             />
-                          </svg>
+                          </motion.svg>
                           {feature}
                         </motion.li>
                       ))}
                     </ul>
                   </div>
-
-                  {/* Декоративный фон для карточки */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-secondary/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                </Card3D>
+                </motion.div>
               </motion.div>
             ))}
           </motion.div>
