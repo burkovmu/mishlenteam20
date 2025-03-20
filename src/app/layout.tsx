@@ -1,50 +1,43 @@
-import type { Metadata } from "next";
-import { Manrope, Space_Grotesk, Montserrat } from "next/font/google";
+'use client';
+
+import { Manrope } from "next/font/google";
 import "./globals.css";
-import SmoothScroll from "../components/ui/SmoothScroll";
+import { ReactNode } from "react";
 import Header from "../components/layout/Header";
 import Footer from "../components/ui/Footer";
+import { BackgroundEffect } from "../components/ui/BackgroundEffect";
 
 // Основной текст: Manrope - современный, четкий и хорошо читаемый шрифт
 const manrope = Manrope({
   subsets: ["latin", "cyrillic"],
-  variable: "--font-sans",
+  weight: ["200", "300", "400", "500", "600", "700", "800"],
   display: "swap",
+  variable: "--font-manrope",
 });
-
-// Монотипный шрифт: Space Grotesk - стильный моноширинный шрифт с геометрическими формами
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  display: "swap",
-});
-
-// Шрифт для заголовков: Montserrat - элегантный шрифт с современным характером
-const montserrat = Montserrat({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-display",
-  display: "swap",
-});
-
-export const metadata: Metadata = {
-  title: "Mishlen Team | Веб-студия",
-  description: "Мы создаем современные веб-сайты с уникальным дизайном и впечатляющей анимацией",
-  keywords: ["Mishlen Team", "веб-студия", "дизайн сайтов", "разработка сайтов", "анимация", "премиум"],
-};
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: ReactNode;
+}) {
   return (
-    <html lang="ru" className={`${manrope.variable} ${spaceGrotesk.variable} ${montserrat.variable}`}>
-      <body className="antialiased">
-        <Header />
-        <SmoothScroll>
-          {children}
+    <html lang="ru">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="Инновационная веб-студия, специализирующаяся на разработке современных веб-сайтов и интерактивных приложений." />
+        <title>WebStudio — Современные решения для вашего бизнеса</title>
+        <link rel="icon" href="/favicon.ico" />
+      </head>
+      <body className={`${manrope.className} ${manrope.variable}`}>
+        <BackgroundEffect />
+        <div className="min-h-screen flex flex-col">
+          <Header />
+          <main className="flex-grow">
+            {children}
+          </main>
           <Footer />
-        </SmoothScroll>
+        </div>
       </body>
     </html>
   );
