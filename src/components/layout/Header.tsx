@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import MenuButton from '../../components/ui/MenuButton';
-import MobileMenu from '../../components/ui/MobileMenu';
+import MenuIconButton from '../ui/MenuIconButton';
+import MobileMenu from '../ui/MobileMenu';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -56,7 +56,7 @@ const Header = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="relative z-[100]"
           >
-            <MenuButton isOpen={isMenuOpen} onClick={toggleMenu} />
+            <MenuIconButton isOpen={isMenuOpen} onClick={toggleMenu} />
           </motion.div>
         </div>
       </header>
