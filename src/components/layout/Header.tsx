@@ -27,8 +27,8 @@ const Header = () => {
             : 'bg-transparent py-5'
         }`}
       >
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="flex items-center justify-between">
+        <div className="container-fluid px-4 md:px-6">
+          <div className="max-w-[95%] mx-auto flex items-center justify-between">
             {/* Логотип */}
             <Link href="/" className="text-2xl font-bold font-display text-accent">
               Mishlen Team

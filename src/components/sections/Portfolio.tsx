@@ -1,11 +1,13 @@
 'use client';
 
-import React, { useState, useRef, memo, useMemo } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import React, { useState, useRef, memo, useMemo, useEffect } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import ContactModal from './ContactModal';
 import Button from '@/components/ui/Button';
 import NewProjectModal from '@/components/ui/NewProjectModal';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 // Определение типов для проекта
 interface Project {
@@ -42,10 +44,14 @@ interface ProjectModalProps {
 // Мемоизированный компонент проекта для предотвращения лишних ререндеров
 const ProjectCard = memo(({ project, onClick, isHovered, onHover, onHoverEnd }: ProjectCardProps) => {
   return (
-    <div
-      className="project-card relative overflow-hidden rounded-2xl bg-card border border-border/50 shadow-lg hover:shadow-xl transition-all duration-300"
+    <motion.div
+      className="project-card relative overflow-hidden rounded-2xl bg-card/80 backdrop-blur-sm border border-border/50 shadow-lg hover:shadow-xl transition-all duration-500"
       onMouseEnter={() => onHover(project.id)}
       onMouseLeave={onHoverEnd}
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       style={{ 
         transform: isHovered ? 'translateY(-8px)' : 'translateY(0)',
         transition: 'transform 0.3s ease',
@@ -54,50 +60,108 @@ const ProjectCard = memo(({ project, onClick, isHovered, onHover, onHoverEnd }: 
     >
       <div className="relative h-[300px] md:h-[400px] p-8 flex flex-col justify-end bg-gradient-to-br from-accent/10 via-secondary/10 to-accent/5">
         {/* Фоновая анимация при наведении */}
-        <div 
-          className={`absolute inset-0 bg-gradient-to-r from-accent/20 to-secondary/20 transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}
+        <motion.div 
+          className="absolute inset-0 bg-gradient-to-r from-accent/20 to-secondary/20"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isHovered ? 1 : 0 }}
+          transition={{ duration: 0.3 }}
         />
         
+        {/* Плавающие числа */}
+        {[...Array(8)].map((_, i) => {
+          const xPos = 20 + (i * 10);
+          const yPos = 10 + (i * 8);
+          
+          return (
+            <motion.div
+              key={i}
+              className="absolute text-xl font-mono text-accent/10"
+              initial={{
+                x: `${xPos}%`,
+                y: `${yPos}%`,
+                opacity: 0.1,
+              }}
+              animate={{
+                y: [`${yPos}%`, `${yPos + 5}%`],
+                opacity: [0.1, 0.3, 0.1],
+              }}
+              transition={{
+                duration: 4 + i,
+                repeat: Infinity,
+                repeatType: 'reverse',
+                ease: "easeInOut",
+              }}
+            >
+              {i % 2}
+            </motion.div>
+          );
+        })}
+        
         {/* Категория */}
-        <span
+        <motion.span
           className="relative z-10 inline-block py-1 px-3 rounded-full bg-accent/20 backdrop-blur-sm text-white text-xs font-medium mb-3 w-fit"
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
         >
           {project.category}
-        </span>
+        </motion.span>
         
         {/* Заголовок */}
-        <h3 
+        <motion.h3 
           className="relative z-10 text-2xl md:text-3xl font-bold mb-2"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
         >
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-white/90">
             {project.title}
           </span>
-        </h3>
+        </motion.h3>
         
         {/* Описание */}
-        <p 
-          className={`relative z-10 text-white/90 mb-4 line-clamp-2 md:line-clamp-3 transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-80'}`}
+        <motion.p 
+          className="relative z-10 text-white/90 mb-4 line-clamp-2 md:line-clamp-3"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
         >
           {project.description}
-        </p>
+        </motion.p>
         
         {/* Теги */}
-        <div 
+        <motion.div 
           className="relative z-10 flex flex-wrap gap-2 mb-4"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3 }}
         >
-          {project.tags.map((tag: string) => (
-            <span 
+          {project.tags.map((tag: string, index: number) => (
+            <motion.span 
               key={tag} 
               className="px-3 py-1 bg-accent/20 backdrop-blur-sm rounded-full text-xs text-white/90 border border-white/10"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
             >
               {tag}
-            </span>
+            </motion.span>
           ))}
-        </div>
+        </motion.div>
         
         {/* Кнопка */}
-        <div
-          className={`relative z-10 transform transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+        <motion.div
+          className="relative z-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ 
+            opacity: isHovered ? 1 : 0,
+            y: isHovered ? 0 : 20
+          }}
+          transition={{ duration: 0.3 }}
         >
           <Button 
             onClick={() => onClick(project.id)}
@@ -107,9 +171,37 @@ const ProjectCard = memo(({ project, onClick, isHovered, onHover, onHoverEnd }: 
           >
             Подробнее о проекте
           </Button>
+        </motion.div>
+
+        {/* Декоративные элементы */}
+        <div className="absolute top-0 right-0 w-32 h-32">
+          <motion.div
+            className="absolute inset-0 border border-accent/20 rounded-full"
+            animate={{
+              rotate: 360,
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          />
+          <motion.div
+            className="absolute inset-4 border border-secondary/20 rounded-full"
+            animate={{
+              rotate: -360,
+              scale: [1.1, 1, 1.1],
+            }}
+            transition={{
+              duration: 15,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          />
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 });
 
@@ -135,7 +227,7 @@ const ProjectModal = memo(({ project, onClose }: ProjectModalProps) => {
             fill
             className="object-cover"
             placeholder="blur"
-            blurDataURL={project.placeholder || 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBD/wAARCAAIAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWEREiMxUf/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=='}
+            blurDataURL={project.placeholder || 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBD/wAARCAAIAAgDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWEREiMxUf/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=='}
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
@@ -418,89 +510,179 @@ const projects: Project[] = [
 ];
 
 const Portfolio = () => {
-  const [selectedProject, setSelectedProject] = useState<number | null>(null);
-  const [hoveredProject, setHoveredProject] = useState<number | null>(null);
-  const sectionRef = useRef<HTMLElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [hoveredProjectId, setHoveredProjectId] = useState<number | null>(null);
+  const { scrollYProgress } = useScroll();
+  const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
-  // Мемоизируем выбранный проект, чтобы избежать лишних вычислений при ререндере
-  const selectedProjectData = useMemo(() => 
-    selectedProject !== null ? projects.find(p => p.id === selectedProject) || null : null, 
-    [selectedProject]
-  );
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      gsap.registerPlugin(ScrollTrigger);
+    }
+  }, []);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 50, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.8,
+        ease: [0.16, 1, 0.3, 1],
+      },
+    },
+  };
 
   return (
-    <section id="projects" ref={sectionRef} className="py-24 md:py-32 bg-background relative overflow-hidden">
-      {/* Декоративные элементы */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent opacity-50"></div>
-      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-border to-transparent opacity-50"></div>
-      
-      {/* Упрощенные градиентные круги без анимации */}
-      <div className="absolute top-1/4 right-0 w-[500px] h-[500px] rounded-full bg-gradient-to-r from-accent/5 to-secondary/5 blur-3xl opacity-20"></div>
-      <div className="absolute bottom-1/4 left-0 w-[500px] h-[500px] rounded-full bg-gradient-to-r from-secondary/5 to-accent/5 blur-3xl opacity-20"></div>
-      
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="text-center mb-16">
-          <div
-            className="inline-block py-1 px-3 rounded-full bg-accent/10 text-accent text-sm font-medium mb-4"
-          >
-            Наши работы
-          </div>
-          <h2 
-            ref={titleRef}
-            className="text-3xl md:text-5xl font-bold font-display mb-6 font-[PobedaRegular]"
-          >
-            Портфолио <span className="text-gradient">проектов</span>
-          </h2>
-          <p 
-            className="text-foreground/80 max-w-2xl mx-auto"
-          >
-            Каждый проект — это уникальное решение, созданное с учетом потребностей клиента и современных тенденций в дизайне.
-          </p>
-        </div>
+    <section id="portfolio" className="relative py-20 md:py-32 bg-background overflow-hidden">
+      {/* Фоновые элементы */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-0 right-0 w-2/3 h-screen bg-accent/5 skew-x-12 transform origin-top-right" />
+        <div className="absolute bottom-0 left-0 w-1/2 h-screen bg-secondary/5 -skew-x-12 transform origin-bottom-left" />
+        <div className="absolute top-1/3 right-1/4 w-1/2 h-1/2 bg-gradient-to-t from-accent/10 to-transparent rounded-full blur-[120px]" />
+      </div>
 
-        {/* Сетка проектов с оптимизацией для производительности */}
-        <div 
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 content-visibility-auto"
-        >
-          {projects.map(project => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              onClick={setSelectedProject}
-              isHovered={hoveredProject === project.id}
-              onHover={setHoveredProject}
-              onHoverEnd={() => setHoveredProject(null)}
-            />
-          ))}
-        </div>
-
-        {/* Кнопка "Обсудить проект" */}
-        <div 
-          className="text-center mt-16"
-        >
-          <ContactModal 
-            buttonText="Обсудить ваш проект" 
-            buttonVariant="primary" 
-            buttonSize="lg" 
-            buttonClassName="px-8 shadow-lg shadow-accent/20"
+      {/* Анимированные линии */}
+      <div className="absolute inset-0">
+        {[...Array(4)].map((_, i) => (
+          <motion.div
+            key={`line-${i}`}
+            className="absolute h-[1px] bg-gradient-to-r from-transparent via-accent/20 to-transparent"
+            style={{
+              top: `${25 + i * 20}%`,
+              left: 0,
+              width: '100%',
+              transform: `rotate(${i * 2 - 3}deg)`,
+            }}
+            animate={{
+              x: [-200, 200],
+              opacity: [0.1, 0.3, 0.1],
+            }}
+            transition={{
+              duration: 20 + i * 2,
+              repeat: Infinity,
+              repeatType: 'reverse',
+              ease: "easeInOut",
+            }}
           />
+        ))}
+      </div>
+
+      {/* Сетка точек */}
+      <div className="absolute inset-0 grid grid-cols-[repeat(20,1fr)] grid-rows-[repeat(20,1fr)] opacity-20">
+        {[...Array(400)].map((_, i) => {
+          const row = Math.floor(i / 20);
+          const col = i % 20;
+          const delay = (row + col) * 0.05;
+          
+          return (
+            <motion.div
+              key={i}
+              className="w-[1px] h-[1px] bg-accent rounded-full"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.3 }}
+              transition={{
+                duration: 2,
+                delay,
+                repeat: Infinity,
+                repeatType: 'reverse',
+              }}
+            />
+          );
+        })}
+      </div>
+
+      <motion.div 
+        className="w-full relative z-10"
+        style={{ y }}
+      >
+        <div className="max-w-[95%] mx-auto mb-16 w-full">
+          <motion.div 
+            className="mb-10 flex items-center justify-center gap-4"
+            variants={itemVariants}
+          >
+            <div className="w-24 h-[2px] bg-accent/50" />
+            <motion.span
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="text-accent font-medium tracking-wider uppercase text-sm"
+            >
+              Наши работы
+            </motion.span>
+            <div className="w-24 h-[2px] bg-accent/50" />
+          </motion.div>
+
+          <motion.h2
+            className="text-7xl md:text-8xl font-bold font-display mb-6 tracking-tight leading-[1.1] text-center"
+            variants={itemVariants}
+          >
+            <span className="text-gradient">Кейсы</span>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-2xl text-foreground/80 max-w-3xl mx-auto font-light leading-relaxed text-center"
+          >
+            Каждый проект — это уникальная история успеха и 
+            <span className="text-accent"> инновационное </span> 
+            решение для бизнеса
+          </motion.p>
         </div>
 
-        {/* Модальное окно с деталями проекта */}
+        <motion.div 
+          className="grid grid-cols-12 gap-8 w-full px-8"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          {projects.map((project, index) => (
+            <motion.div
+              key={project.id}
+              variants={itemVariants}
+              className={`relative ${
+                index === 0 ? 'col-span-12 md:col-span-8 md:col-start-5' :
+                index === 1 ? 'col-span-12 md:col-span-4' :
+                index === 2 ? 'col-span-12 md:col-span-6' :
+                'col-span-12 md:col-span-6'
+              }`}
+            >
+              <ProjectCard
+                project={project}
+                onClick={(id) => setSelectedProject(projects.find(p => p.id === id) || null)}
+                isHovered={hoveredProjectId === project.id}
+                onHover={setHoveredProjectId}
+                onHoverEnd={() => setHoveredProjectId(null)}
+              />
+            </motion.div>
+          ))}
+        </motion.div>
+
         <AnimatePresence>
-          {selectedProject !== null && selectedProjectData && (
-            <NewProjectModal 
-              isOpen={selectedProject !== null}
+          {selectedProject && (
+            <ProjectModal
+              project={selectedProject}
               onClose={() => setSelectedProject(null)}
-              title={selectedProjectData.title}
-              description={selectedProjectData.description}
-              projectUrl={selectedProjectData.projectUrl}
-              images={selectedProjectData.galleryImages || []}
             />
           )}
         </AnimatePresence>
-      </div>
+      </motion.div>
     </section>
   );
 };

@@ -1,30 +1,35 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import Card3D from '@/components/ui/Card3D';
-import AnimatedBackground from '@/components/ui/AnimatedBackground';
-import ParallaxItem from '@/components/ui/ParallaxItem';
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      delay: 0.1,
-    },
-  },
-};
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const Services = () => {
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      gsap.registerPlugin(ScrollTrigger);
+    }
+  }, []);
+
+  const { scrollYProgress } = useScroll();
+  const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
+
   const services = [
     {
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <motion.svg 
+          width="24" 
+          height="24" 
+          viewBox="0 0 24 24" 
+          fill="none" 
+          xmlns="http://www.w3.org/2000/svg"
+          animate={{ rotate: [0, 360] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        >
           <path d="M12 16.5V21.5M18 21.5H6M5 3.5H19C20.1046 3.5 21 4.39543 21 5.5V15.5C21 16.6046 20.1046 17.5 19 17.5H5C3.89543 17.5 3 16.6046 3 15.5V5.5C3 4.39543 3.89543 3.5 5 3.5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        </motion.svg>
       ),
       title: 'Веб-разработка',
       description: 'Создаем современные, быстрые и адаптивные веб-сайты с использованием передовых технологий и фреймворков.',
@@ -88,90 +93,243 @@ const Services = () => {
     },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 50, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.8,
+        ease: [0.16, 1, 0.3, 1],
+      },
+    },
+  };
+
   return (
     <section id="services" className="relative py-20 md:py-32 bg-background overflow-hidden">
-      {/* Анимированный фон */}
-      <AnimatedBackground className="opacity-50" />
-      
-      {/* Декоративные элементы */}
-      <ParallaxItem speed={0.2} className="absolute top-20 left-10 z-0">
-        <div className="w-2 h-2 rounded-full bg-accent"></div>
-      </ParallaxItem>
-      
-      <ParallaxItem speed={-0.3} className="absolute top-40 right-20 z-0">
-        <div className="w-3 h-3 rounded-full bg-secondary"></div>
-      </ParallaxItem>
-      
-      <ParallaxItem speed={0.4} className="absolute bottom-40 left-1/4 z-0">
-        <div className="w-4 h-4 rounded-full bg-accent/50"></div>
-      </ParallaxItem>
-      
-      <div className="absolute top-1/4 left-0 w-[150px] h-[1px] bg-gradient-to-r from-accent to-transparent z-0"></div>
-      <div className="absolute bottom-1/3 right-0 w-[150px] h-[1px] bg-gradient-to-l from-secondary to-transparent z-0"></div>
-      
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl flex flex-col items-center">
-        <div className="text-center mb-16 w-full">
-          <motion.span
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="inline-block py-1 px-3 rounded-full bg-accent/10 text-accent text-sm font-medium mb-4"
-          >
-            Наши услуги
-          </motion.span>
-          <motion.h2
-            className="text-3xl md:text-5xl font-bold font-display tracking-tight mb-6"
-            variants={fadeInUp}
-          >
-            Наши <span className="text-gradient">услуги</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="max-w-2xl mx-auto text-foreground/80 font-light"
-          >
-            Мы предоставляем полный спектр услуг по разработке веб-сайтов и приложений, 
-            от проектирования до запуска и поддержки.
-          </motion.p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-          {services.map((service, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <Card3D 
-                className="bg-card p-6 h-full rounded-xl border border-border hover:border-accent/50 transition-all duration-300"
-                glareColor={index % 2 === 0 ? 'rgba(255, 62, 0, 0.1)' : 'rgba(37, 99, 235, 0.1)'}
-              >
-                <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center text-accent mb-6 group-hover:bg-accent group-hover:text-white transition-all duration-300">
-                  {service.icon}
-                </div>
-                <h3 className="text-xl font-bold font-display mb-2">{service.title}</h3>
-                <p className="text-foreground/80 mb-6">{service.description}</p>
-                
-                <ul className="space-y-2 mb-6">
-                  {service.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center text-sm text-foreground/70">
-                      <svg className="w-4 h-4 mr-2 text-accent" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </Card3D>
-            </motion.div>
-          ))}
-        </div>
+      {/* Фоновые элементы */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-0 left-0 w-2/3 h-screen bg-accent/5 -skew-x-12 transform origin-top-left" />
+        <div className="absolute bottom-0 right-0 w-1/2 h-screen bg-secondary/5 skew-x-12 transform origin-bottom-right" />
+        <div className="absolute top-1/3 left-1/4 w-1/2 h-1/2 bg-gradient-to-t from-accent/10 to-transparent rounded-full blur-[120px]" />
       </div>
+
+      {/* Анимированные линии */}
+      <div className="absolute inset-0">
+        {[...Array(4)].map((_, i) => (
+          <motion.div
+            key={`line-${i}`}
+            className="absolute h-[1px] bg-gradient-to-r from-transparent via-accent/20 to-transparent"
+            style={{
+              top: `${25 + i * 20}%`,
+              left: 0,
+              width: '100%',
+              transform: `rotate(${i * 2 - 3}deg)`,
+            }}
+            animate={{
+              x: [-200, 200],
+              opacity: [0.1, 0.3, 0.1],
+            }}
+            transition={{
+              duration: 20 + i * 2,
+              repeat: Infinity,
+              repeatType: 'reverse',
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Сетка точек */}
+      <div className="absolute inset-0 grid grid-cols-[repeat(20,1fr)] grid-rows-[repeat(20,1fr)] opacity-20">
+        {[...Array(400)].map((_, i) => {
+          const row = Math.floor(i / 20);
+          const col = i % 20;
+          const delay = (row + col) * 0.05;
+          
+          return (
+            <motion.div
+              key={i}
+              className="w-[1px] h-[1px] bg-accent rounded-full"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.3 }}
+              transition={{
+                duration: 2,
+                delay,
+                repeat: Infinity,
+                repeatType: 'reverse',
+              }}
+            />
+          );
+        })}
+      </div>
+
+      {/* Плавающие геометрические фигуры */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={`shape-${i}`}
+            className={`absolute ${
+              i % 2 === 0 
+                ? 'border border-accent/10' 
+                : 'bg-gradient-to-br from-accent/5 to-transparent'
+            } ${
+              i % 3 === 0 
+                ? 'rounded-full' 
+                : i % 3 === 1
+                ? 'rounded-lg'
+                : 'rounded-2xl'
+            }`}
+            style={{
+              width: `${40 + i * 20}px`,
+              height: `${40 + i * 20}px`,
+              left: `${15 + (i * 20) % 70}%`,
+              top: `${20 + (i * 25) % 60}%`,
+              opacity: 0.6 - (i * 0.08),
+            }}
+            animate={{
+              y: [0, -30, 0],
+              x: [0, i % 2 === 0 ? 30 : -30, 0],
+              rotate: [0, i % 2 === 0 ? 180 : -180],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: 20 + i * 2,
+              repeat: Infinity,
+              repeatType: 'reverse',
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
+
+      <motion.div 
+        className="w-full relative z-10"
+        style={{ y }}
+      >
+        <div className="grid grid-cols-12 gap-8 max-w-[95%] mx-auto mb-16">
+          <div className="col-span-12 md:col-span-4 relative">
+            <motion.div 
+              className="sticky top-32 flex flex-col items-start"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <motion.span
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="text-accent font-medium tracking-wider uppercase text-sm mb-8"
+              >
+                Наши услуги
+              </motion.span>
+
+              <motion.h2
+                className="text-6xl md:text-7xl font-bold font-display tracking-tight leading-[1.1] text-left"
+                variants={itemVariants}
+              >
+                <span className="block">Создаем</span>
+                <span className="block text-gradient mt-2">будущее</span>
+                <span className="block mt-2">вместе</span>
+              </motion.h2>
+
+              <div className="w-24 h-[2px] bg-accent/50 my-8" />
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="text-xl text-foreground/80 font-light leading-relaxed"
+              >
+                Мы предоставляем полный спектр услуг по разработке 
+                <span className="text-accent"> инновационных </span> 
+                веб-решений, от проектирования до запуска и поддержки
+              </motion.p>
+            </motion.div>
+          </div>
+
+          <motion.div 
+            className="col-span-12 md:col-span-8 grid grid-cols-12 gap-8"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            {services.map((service, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className={`relative ${
+                  index === 0 || index === 5 ? 'col-span-12' :
+                  index === 1 || index === 4 ? 'col-span-6' :
+                  'col-span-6'
+                }`}
+              >
+                <Card3D 
+                  className="bg-card/80 backdrop-blur-sm p-8 h-full rounded-xl border border-border hover:border-accent/50 transition-all duration-500"
+                  glareColor={index % 2 === 0 ? 'rgba(255, 62, 0, 0.1)' : 'rgba(37, 99, 235, 0.1)'}
+                >
+                  <div className="relative z-10">
+                    <div className="w-16 h-16 rounded-xl bg-accent/10 flex items-center justify-center text-accent mb-8 transition-all duration-300 hover:scale-110">
+                      {service.icon}
+                    </div>
+                    <h3 className="text-3xl font-bold font-display mb-4">{service.title}</h3>
+                    <p className="text-foreground/80 mb-8 leading-relaxed text-lg">{service.description}</p>
+                    
+                    <ul className="space-y-4">
+                      {service.features.map((feature, featureIndex) => (
+                        <motion.li 
+                          key={featureIndex} 
+                          className="flex items-center text-base text-foreground/70"
+                          initial={{ opacity: 0, x: -10 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.2 + featureIndex * 0.1 }}
+                        >
+                          <svg 
+                            className="w-6 h-6 mr-3 text-accent" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path 
+                              d="M20 6L9 17L4 12" 
+                              stroke="currentColor" 
+                              strokeWidth="2" 
+                              strokeLinecap="round" 
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                          {feature}
+                        </motion.li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Декоративный фон для карточки */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-secondary/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                </Card3D>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </motion.div>
     </section>
   );
 };

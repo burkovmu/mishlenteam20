@@ -174,155 +174,134 @@ const Articles = () => {
         }}
       />
       
-      <div className="container mx-auto px-4 relative z-10">
-        {/* Общий заголовок для объединенной секции - центрированный */}
-        <div className="flex flex-col items-center mb-12">
-          <motion.h2
-            className="text-3xl md:text-4xl font-bold font-display tracking-tight mb-3 text-center"
+      <div className="container-fluid px-4 relative z-10">
+        {/* Общий заголовок для объединенной секции - выравнивание по левому краю */}
+        <div className="max-w-[95%] mx-auto mb-16">
+          <motion.div 
+            className="mb-10 flex items-center justify-center gap-4"
             variants={fadeInUp}
           >
-            Наш <span className="text-gradient">стек</span>
+            <div className="w-24 h-[2px] bg-accent/50" />
+            <motion.span
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="text-accent font-medium tracking-wider uppercase text-sm"
+            >
+              Технологии
+            </motion.span>
+            <div className="w-24 h-[2px] bg-accent/50" />
+          </motion.div>
+
+          <motion.h2
+            className="text-7xl md:text-8xl font-bold font-display mb-16 tracking-tight leading-[1.1] text-center"
+            variants={fadeInUp}
+          >
+            <span className="text-gradient">Наш стек</span>
           </motion.h2>
-          <p className="text-foreground/80 text-base max-w-2xl text-center font-sans">
-            Используем передовые технологии для создания современных веб-приложений
-          </p>
         </div>
 
         {/* Табы категорий */}
-        <div className="relative flex justify-center mb-12">
-          <div className="flex space-x-1 bg-card/40 backdrop-blur-sm p-1 rounded-xl border border-border/30 shadow-lg">
-            {categories.map((category) => (
-              <button 
-                key={category} 
-                onClick={() => setActiveCategory(category)}
-                className={`relative px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 font-sans ${
-                  activeCategory === category 
-                    ? 'text-white' 
-                    : 'text-foreground/70 hover:text-foreground hover:bg-white/5'
-                }`}
-              >
-                {activeCategory === category && (
-                  <motion.div
-                    layoutId="activeTab"
-                    className="absolute inset-0 bg-gradient-to-br from-primary/90 to-accent/90 rounded-lg shadow-md"
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
-                  />
-                )}
-                <span className="relative z-10 flex items-center">
-                  {category === 'Frontend' && (
-                    <svg className="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                  )}
-                  {category === 'Backend' && (
-                    <svg className="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
-                    </svg>
-                  )}
-                  {category === 'Инструменты' && (
-                    <svg className="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                  )}
-                  {category}
-                </span>
-              </button>
-            ))}
-          </div>
+        <div className="flex flex-wrap gap-4 mb-12 max-w-[95%] mx-auto">
+          {categories.map((category) => (
+            <button
+              key={category}
+              onClick={() => setActiveCategory(category)}
+              className={`px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
+                activeCategory === category
+                  ? 'bg-accent text-white shadow-lg shadow-accent/25'
+                  : 'bg-card/50 text-foreground/70 hover:bg-card/80'
+              }`}
+            >
+              {category}
+            </button>
+          ))}
         </div>
 
-        {/* Технологии с центрированием */}
-        <div className="relative h-[180px] mb-16">
-          <AnimatePresence mode="wait">
+        {/* Сетка технологий */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 max-w-[95%] mx-auto mb-32">
+          {filteredTechnologies.map((tech, index) => (
             <motion.div
-              key={activeCategory}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="absolute inset-0 flex items-center justify-center"
+              key={tech.name}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="group relative"
             >
-              <div className="w-full overflow-x-auto no-scrollbar">
-                <motion.div
-                  variants={containerVariants}
-                  initial="hidden"
-                  animate="visible"
-                  className="flex space-x-6 justify-center mx-auto max-w-[1280px] px-4"
+              <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-r from-accent to-secondary opacity-0 group-hover:opacity-30 blur transition duration-500"></div>
+              <div className="relative bg-card/50 backdrop-blur-sm p-6 rounded-xl border border-border/50 hover:border-accent/50 transition-colors duration-300">
+                <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center text-accent mb-4">
+                  <Image
+                    src={tech.icon}
+                    alt={tech.name}
+                    width={32}
+                    height={32}
+                    className="transition-transform duration-300 group-hover:scale-110"
+                  />
+                </div>
+                <h3 className="text-lg font-bold font-display mb-2">{tech.name}</h3>
+                <p className="text-foreground/70 text-sm">{tech.description}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Блок со статьями внизу */}
+        <div className="mt-32 bg-gradient-to-r from-accent/10 via-primary/10 to-secondary/10 backdrop-blur-sm relative overflow-hidden">
+          <div className="absolute inset-0 bg-card/40"></div>
+          <div className="max-w-[95%] mx-auto py-24 px-8 relative z-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+              <div className="space-y-8">
+                <motion.h3 
+                  className="text-4xl md:text-5xl font-bold font-display leading-tight"
+                  variants={fadeInUp}
                 >
-                  {filteredTechnologies.map((tech) => (
+                  Делимся экспертными <span className="text-gradient">знаниями</span>
+                </motion.h3>
+                <motion.p 
+                  className="text-xl text-foreground/80 leading-relaxed"
+                  variants={fadeInUp}
+                >
+                  Читайте наши статьи о современной веб-разработке, дизайне и технологиях. 
+                  Мы регулярно публикуем полезные материалы, которые помогут вам быть в курсе последних трендов.
+                </motion.p>
+                <motion.div 
+                  className="flex flex-wrap gap-4"
+                  variants={containerVariants}
+                >
+                  {['Web-разработка', 'UX/UI Дизайн', 'Оптимизация', 'SEO', 'Тренды', 'Инструменты'].map((tag, index) => (
                     <motion.div
-                      key={tech.name}
+                      key={tag}
                       variants={itemVariants}
-                      className="relative group w-[180px] flex-shrink-0"
+                      className="bg-card/50 px-4 py-2 rounded-lg border border-border/50 text-sm font-medium backdrop-blur-sm"
                     >
-                      <div className="bg-card rounded-xl p-5 h-full transition-all duration-300 hover:shadow-lg hover:scale-[1.03] border border-border/50">
-                        <div className="flex flex-col items-center text-center">
-                          <div className="w-10 h-10 mb-3 relative">
-                            <Image
-                              src={tech.icon}
-                              alt={tech.name}
-                              fill
-                              className="object-contain"
-                            />
-                          </div>
-                          <h3 className="text-base font-semibold mb-1 font-sans">{tech.name}</h3>
-                          <p className="text-xs text-foreground/70 font-sans">{tech.description}</p>
-                        </div>
-                      </div>
+                      {tag}
                     </motion.div>
                   ))}
                 </motion.div>
               </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Блок со статьями внизу */}
-        <div className="bg-card/40 backdrop-blur-sm rounded-xl border border-border/30 p-6 md:p-8 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-primary/5 mix-blend-overlay"></div>
-          <div className="absolute right-0 top-0 w-1/3 h-full bg-gradient-to-l from-accent/10 to-transparent"></div>
-          
-          <div className="relative z-10 flex flex-col md:flex-row gap-8 items-center md:items-start">
-            <div className="md:w-2/3">
-              <p className="text-lg md:text-xl mb-6 font-medium text-white font-sans">
-                Делимся экспертными знаниями и советами по созданию современных веб-сайтов в нашем блоге
-              </p>
-              <div className="flex gap-4 flex-wrap">
-                <div className="bg-card/50 px-4 py-2 rounded-lg border border-border/50 text-sm font-sans">
-                  Web-разработка
-                </div>
-                <div className="bg-card/50 px-4 py-2 rounded-lg border border-border/50 text-sm font-sans">
-                  UX/UI Дизайн
-                </div>
-                <div className="bg-card/50 px-4 py-2 rounded-lg border border-border/50 text-sm font-sans">
-                  Оптимизация
-                </div>
-                <div className="bg-card/50 px-4 py-2 rounded-lg border border-border/50 text-sm font-sans">
-                  SEO
-                </div>
-              </div>
-            </div>
-            
-            <div className="flex justify-center md:justify-end md:w-1/3">
-              <Link 
-                href="/blog" 
-                className="group inline-flex items-center justify-center"
-              >
-                <span className="relative overflow-hidden rounded-full">
-                  <span className="absolute inset-0 bg-gradient-to-r from-accent to-primary opacity-80 group-hover:opacity-100 transition-opacity duration-300"></span>
-                  <span className="relative flex items-center px-6 py-3 text-white font-medium font-sans">
-                    Читать статьи
-                    <svg className="ml-2 w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" 
+              
+              <div className="flex justify-center md:justify-end">
+                <Link 
+                  href="/blog" 
+                  className="group relative inline-flex items-center justify-center"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-accent to-primary rounded-full opacity-70 blur-xl transition-all duration-500 group-hover:opacity-100"></div>
+                  <div className="relative flex items-center gap-2 px-8 py-4 rounded-full bg-card/80 border border-border backdrop-blur-sm transition-all duration-300 group-hover:border-accent/50">
+                    <span className="text-lg font-medium">Читать статьи</span>
+                    <svg 
+                      className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-1" 
                       fill="none" 
                       stroke="currentColor" 
                       viewBox="0 0 24 24"
                     >
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>
-                  </span>
-                </span>
-              </Link>
+                  </div>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
