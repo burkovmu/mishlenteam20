@@ -147,17 +147,17 @@ const Hero = () => {
       </div>
 
       {/* Основной контент */}
-      <div className="relative w-full h-full min-h-screen flex items-center">
+      <div className="relative w-full h-full min-h-screen flex flex-col md:flex-row items-center">
         {/* Левая колонка */}
         <motion.div 
-          className="w-1/2 h-full pl-24 flex flex-col justify-center"
+          className="w-full md:w-1/2 h-full px-6 md:pl-24 flex flex-col justify-center py-24 md:py-0"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          {/* Декоративная линия с точками */}
+          {/* Декоративная линия с точками - скрываем на мобильных */}
           <motion.div
-            className="absolute left-8 h-full w-8 flex flex-col items-center justify-center gap-6"
+            className="absolute left-8 h-full w-8 hidden md:flex flex-col items-center justify-center gap-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1 }}
@@ -183,24 +183,24 @@ const Hero = () => {
 
           <motion.div 
             variants={itemVariants}
-            className="mb-10 flex items-center gap-4"
+            className="mb-6 md:mb-10 flex items-center gap-4"
           >
-            <div className="w-12 h-[2px] bg-accent/50" />
-            <span className="text-accent font-medium tracking-wider uppercase text-sm">Веб-студия</span>
+            <div className="w-8 md:w-12 h-[2px] bg-accent/50" />
+            <span className="text-accent font-medium tracking-wider uppercase text-xs md:text-sm">Веб-студия</span>
           </motion.div>
 
           <motion.h1 
-            className="text-7xl font-bold font-display leading-[0.9] mb-10"
+            className="text-4xl md:text-7xl font-bold font-display leading-[0.95] mb-6 md:mb-10"
             variants={itemVariants}
           >
             <span className="block">Добавим</span>
-            <span className="block text-gradient ml-16 my-3">звезд</span>
-            <span className="block ml-32">вашему бизнесу</span>
+            <span className="block text-gradient ml-4 md:ml-16 my-2 md:my-3">звезд</span>
+            <span className="block ml-8 md:ml-32">вашему бизнесу</span>
           </motion.h1>
 
           <motion.p
             variants={itemVariants}
-            className="text-xl text-foreground/70 max-w-md ml-16 mb-12 leading-relaxed"
+            className="text-lg md:text-xl text-foreground/70 max-w-md ml-0 md:ml-16 mb-8 md:mb-12 leading-relaxed"
           >
             Мы создаем <span className="text-accent font-medium">инновационные</span> цифровые решения, 
             которые <span className="text-gradient font-medium">превосходят ожидания</span>
@@ -208,11 +208,11 @@ const Hero = () => {
 
           <motion.div
             variants={itemVariants}
-            className="flex items-center gap-6 ml-32"
+            className="flex items-center gap-6 ml-4 md:ml-32"
           >
             <MagneticButton 
               strength={50}
-              className="group relative overflow-hidden rounded-full bg-accent text-background hover:bg-accent/90 transition-all duration-300 py-4 px-8 font-sans tracking-wide text-lg shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30"
+              className="group relative overflow-hidden rounded-full bg-accent text-background hover:bg-accent/90 transition-all duration-300 py-3 md:py-4 px-6 md:px-8 font-sans tracking-wide text-base md:text-lg shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30"
             >
               <motion.span
                 className="relative z-10 flex items-center gap-2"
@@ -241,7 +241,7 @@ const Hero = () => {
           {/* Статистика */}
           <motion.div
             variants={itemVariants}
-            className="flex gap-16 mt-20 ml-16"
+            className="flex flex-wrap gap-8 md:gap-16 mt-12 md:mt-20 ml-0 md:ml-16"
           >
             {[
               { number: '5+', label: 'Лет опыта' },
@@ -255,7 +255,7 @@ const Hero = () => {
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
                 <motion.div 
-                  className="text-4xl font-bold font-display mb-2 text-gradient"
+                  className="text-3xl md:text-4xl font-bold font-display mb-1 md:mb-2 text-gradient"
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ 
@@ -266,7 +266,7 @@ const Hero = () => {
                 >
                   {stat.number}
                 </motion.div>
-                <div className="text-sm text-foreground/60 group-hover:text-foreground/80 transition-all duration-300">
+                <div className="text-xs md:text-sm text-foreground/60 group-hover:text-foreground/80 transition-all duration-300">
                   {stat.label}
                 </div>
               </motion.div>
@@ -274,8 +274,8 @@ const Hero = () => {
           </motion.div>
         </motion.div>
 
-        {/* Правая колонка */}
-        <div className="w-1/2 h-full relative">
+        {/* Правая колонка - скрываем на мобильных устройствах */}
+        <div className="w-full md:w-1/2 h-full relative hidden md:block">
           {/* Декоративные элементы */}
           <div className="absolute top-1/3 right-24 w-80 h-80">
             <motion.div
@@ -380,19 +380,19 @@ const Hero = () => {
 
       {/* Нижняя панель */}
       <motion.div 
-        className="absolute bottom-0 left-0 w-full h-24 flex items-center justify-between px-24 border-t border-foreground/10 backdrop-blur-md bg-background/5"
+        className="absolute bottom-0 left-0 w-full h-16 md:h-24 flex flex-col md:flex-row items-center justify-center md:justify-between px-6 md:px-24 border-t border-foreground/10 backdrop-blur-md bg-background/5"
         initial={{ y: 100 }}
         animate={{ y: 0 }}
         transition={{ delay: 1, duration: 0.8 }}
       >
-        <div className="flex items-center gap-12">
-          <span className="text-sm text-foreground/60 font-medium">Следите за нами</span>
-          <div className="flex items-center gap-6">
+        <div className="flex flex-col md:flex-row items-center gap-4 md:gap-12 mb-4 md:mb-0">
+          <span className="text-xs md:text-sm text-foreground/60 font-medium">Следите за нами</span>
+          <div className="flex items-center gap-4 md:gap-6">
             {['Telegram', 'Instagram', 'Behance'].map((social, i) => (
               <motion.a
                 key={social}
                 href="#"
-                className="text-sm text-foreground/60 hover:text-accent transition-all hover:tracking-wide"
+                className="text-xs md:text-sm text-foreground/60 hover:text-accent transition-all hover:tracking-wide"
                 whileHover={{ y: -2 }}
               >
                 {social}
@@ -402,7 +402,7 @@ const Hero = () => {
         </div>
         
         <motion.div 
-          className="flex items-center gap-3 text-sm text-foreground/60 group cursor-pointer"
+          className="flex items-center gap-2 md:gap-3 text-xs md:text-sm text-foreground/60 group cursor-pointer mb-4 md:mb-0"
           animate={{
             y: [0, -5, 0]
           }}
@@ -414,8 +414,8 @@ const Hero = () => {
         >
           <span className="group-hover:text-accent transition-colors">Прокрутите вниз</span>
           <svg 
-            width="16" 
-            height="16" 
+            width="12" 
+            height="12" 
             viewBox="0 0 24 24" 
             fill="none" 
             xmlns="http://www.w3.org/2000/svg"

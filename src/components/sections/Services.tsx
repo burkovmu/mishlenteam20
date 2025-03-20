@@ -218,10 +218,10 @@ const Services = () => {
         className="w-full relative z-10"
         style={{ y }}
       >
-        <div className="grid grid-cols-12 gap-8 max-w-[95%] mx-auto mb-16">
-          <div className="col-span-12 md:col-span-4 relative">
+        <div className="grid grid-cols-12 gap-4 md:gap-8 max-w-[95%] mx-auto mb-12 md:mb-16">
+          <div className="col-span-12 md:col-span-4 relative mb-8 md:mb-0">
             <motion.div 
-              className="sticky top-32 flex flex-col items-start"
+              className="md:sticky md:top-32 flex flex-col items-start px-4 md:px-0"
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -232,13 +232,13 @@ const Services = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
-                className="text-accent font-medium tracking-wider uppercase text-sm mb-8"
+                className="text-accent font-medium tracking-wider uppercase text-sm mb-6 md:mb-8"
               >
                 Наши услуги
               </motion.span>
 
               <motion.h2
-                className="text-6xl md:text-7xl font-bold font-display tracking-tight leading-[1.1] text-left"
+                className="text-4xl md:text-6xl lg:text-7xl font-bold font-display tracking-tight leading-[1.1] text-left"
                 variants={itemVariants}
               >
                 <span className="block">Создаем</span>
@@ -246,14 +246,14 @@ const Services = () => {
                 <span className="block mt-2">вместе</span>
               </motion.h2>
 
-              <div className="w-24 h-[2px] bg-accent/50 my-8" />
+              <div className="w-16 md:w-24 h-[2px] bg-accent/50 my-6 md:my-8" />
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-xl text-foreground/80 font-light leading-relaxed"
+                className="text-lg md:text-xl text-foreground/80 font-light leading-relaxed"
               >
                 Мы предоставляем полный спектр услуг по разработке 
                 <span className="text-accent"> инновационных </span> 
@@ -263,7 +263,7 @@ const Services = () => {
           </div>
 
           <motion.div 
-            className="col-span-12 md:col-span-8 grid grid-cols-12 gap-8"
+            className="col-span-12 md:col-span-8 grid grid-cols-12 gap-4 md:gap-8"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -276,34 +276,34 @@ const Services = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className={`relative ${
-                  index === 0 || index === 5 ? 'col-span-12' :
-                  index === 1 || index === 4 ? 'col-span-6' :
-                  'col-span-6'
-                }`}
+                className={`relative col-span-12 ${
+                  index === 0 || index === 5 ? 'md:col-span-12' :
+                  index === 1 || index === 4 ? 'md:col-span-6' :
+                  'md:col-span-6'
+                } mb-4 md:mb-0`}
               >
                 <Card3D 
-                  className="bg-card/80 backdrop-blur-sm p-8 h-full rounded-xl border border-border hover:border-accent/50 transition-all duration-500"
+                  className="bg-card/80 backdrop-blur-sm p-6 md:p-8 h-full rounded-xl border border-border hover:border-accent/50 transition-all duration-500"
                   glareColor={index % 2 === 0 ? 'rgba(255, 62, 0, 0.1)' : 'rgba(37, 99, 235, 0.1)'}
                 >
                   <div className="relative z-10">
-                    <div className="w-16 h-16 rounded-xl bg-accent/10 flex items-center justify-center text-accent mb-8 transition-all duration-300 hover:scale-110">
+                    <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl bg-accent/10 flex items-center justify-center text-accent mb-6 md:mb-8 transition-all duration-300 hover:scale-110">
                       {service.icon}
                     </div>
-                    <h3 className="text-3xl font-bold font-display mb-4">{service.title}</h3>
-                    <p className="text-foreground/80 mb-8 leading-relaxed text-lg">{service.description}</p>
+                    <h3 className="text-2xl md:text-3xl font-bold font-display mb-3 md:mb-4">{service.title}</h3>
+                    <p className="text-foreground/80 mb-6 md:mb-8 leading-relaxed text-base md:text-lg">{service.description}</p>
                     
-                    <ul className="space-y-4">
+                    <ul className="space-y-3 md:space-y-4">
                       {service.features.map((feature, featureIndex) => (
                         <motion.li 
                           key={featureIndex} 
-                          className="flex items-center text-base text-foreground/70"
+                          className="flex items-center text-sm md:text-base text-foreground/70"
                           initial={{ opacity: 0, x: -10 }}
                           whileInView={{ opacity: 1, x: 0 }}
                           transition={{ delay: 0.2 + featureIndex * 0.1 }}
                         >
                           <svg 
-                            className="w-6 h-6 mr-3 text-accent" 
+                            className="w-5 h-5 md:w-6 md:h-6 mr-2 md:mr-3 text-accent" 
                             viewBox="0 0 24 24" 
                             fill="none" 
                             xmlns="http://www.w3.org/2000/svg"
