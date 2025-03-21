@@ -2,7 +2,6 @@
 
 import React, { useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import Card3D from '@/components/ui/Card3D';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 

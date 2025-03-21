@@ -1,11 +1,9 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useInView } from 'react-intersection-observer';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
