@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import NewProjectModal from '../ui/NewProjectModal';
+import Image from 'next/image';
 
 // Массивы изображений для каждого проекта
 const project1Images = [
@@ -133,10 +134,12 @@ const ProjectsSection = () => {
             className="relative aspect-video rounded-2xl overflow-hidden cursor-pointer group"
             onClick={() => setIsProject1Open(true)}
           >
-            <img 
-              src={project1Images[0].src} 
-              alt={project1Images[0].alt}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            <Image
+              src="/images/projects/project1.webp"
+              alt="Project 1"
+              width={400}
+              height={300}
+              className="w-full h-full object-cover rounded-xl"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="absolute bottom-0 left-0 right-0 p-6 text-white translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
@@ -150,10 +153,12 @@ const ProjectsSection = () => {
             className="relative aspect-video rounded-2xl overflow-hidden cursor-pointer group"
             onClick={() => setIsProject2Open(true)}
           >
-            <img 
-              src={project2Images[0].src} 
-              alt={project2Images[0].alt}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            <Image
+              src="/images/projects/project2.webp"
+              alt="Project 2"
+              width={400}
+              height={300}
+              className="w-full h-full object-cover rounded-xl"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="absolute bottom-0 left-0 right-0 p-6 text-white translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
@@ -167,10 +172,12 @@ const ProjectsSection = () => {
             className="relative aspect-video rounded-2xl overflow-hidden cursor-pointer group"
             onClick={() => setIsProject3Open(true)}
           >
-            <img 
-              src={project3Images[0].src} 
-              alt={project3Images[0].alt}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            <Image
+              src="/images/projects/project3.webp"
+              alt="Project 3"
+              width={400}
+              height={300}
+              className="w-full h-full object-cover rounded-xl"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="absolute bottom-0 left-0 right-0 p-6 text-white translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
@@ -184,10 +191,12 @@ const ProjectsSection = () => {
             className="relative aspect-video rounded-2xl overflow-hidden cursor-pointer group"
             onClick={() => setIsProject4Open(true)}
           >
-            <img 
-              src={project4Images[0].src} 
-              alt={project4Images[0].alt}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            <Image
+              src="/images/projects/project4.webp"
+              alt="Project 4"
+              width={400}
+              height={300}
+              className="w-full h-full object-cover rounded-xl"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="absolute bottom-0 left-0 right-0 p-6 text-white translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
